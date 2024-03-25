@@ -10,7 +10,7 @@ beforeAll(() => {
     document.close();
 })
 
-const { game, newGame, showScore } = require('../game');
+const { game, newGame, showScore, addTurn, showTurns, lightsOn } = require('../game');
 
 describe("game object contains correct keys", () => {
     test('score key exists', () => {
@@ -52,3 +52,41 @@ describe('newGame works correctly', () => {
         expect(document.getElementById('score').innerText).toEqual(0);
     });
 });
+
+describe('gameplay works correctly', () => {
+    beforeEach(() => {
+        game.score = 0;
+        game.currentGame = [];
+        game.playerMoves = [];
+        addTurn();
+    });
+    afterEach(() => {
+        game.score = 0;
+        game.currentGame = [];
+        game.playerMoves = [];
+    });
+    test('addTurn adds a new turn to the game', () => {
+        addTurn();
+        expect(game.currentGame.length).toBe(2);
+        }
+    );
+    test('should add correct class to light up the buttons', () => {
+        let button = document.getElementById(game.currentGame[0]);
+        lightsOn(game.currentGame[0]);
+        expect(button.classList).toContain('light');
+    });
+    test.each([[1, 2], [2, 4]])(
+        'double(%d)',
+        (input, expected) => {
+            expect(input*2).toBe(expected);
+        }
+    );
+    test('showTurns should update game.turnNumber', () => {
+        game.turnNumber = 42;
+        showTurns();
+        expect(game.turnNumber).toBe(0);
+    });
+    
+});
+
+
